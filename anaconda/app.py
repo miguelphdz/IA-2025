@@ -126,7 +126,7 @@ train_X,valid_X,train_label,valid_label = train_test_split(train_X, train_Y_one_
 print(train_X.shape,valid_X.shape,train_label.shape,valid_label.shape)
 
 INIT_LR = 1e-3 # Valor inicial de learning rate. El valor 1e-3 corresponde con 0.001
-epochs = 20 # Cantidad de iteraciones completas al conjunto de imagenes de entrenamiento
+epochs = 60 # Cantidad de iteraciones completas al conjunto de imagenes de entrenamiento
 batch_size = 64 # cantidad de imágenes que se toman a la vez en memoria
 
 sport_model = Sequential()

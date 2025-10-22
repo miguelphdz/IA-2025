@@ -1,0 +1,107 @@
+  Al ejecutar el programa 3 veces podemos observar que los resultados con 20 epocas son:
+  
+              precision    recall  f1-score   support
+
+    beisball       0.99      1.00      0.99      1553
+    ciclismo       1.00      1.00      1.00      1499
+    natacion       1.00      1.00      1.00      1052
+       tenis       1.00      1.00      1.00      1810
+          f1       0.99      0.99      0.99       958
+      futbol       1.00      0.99      1.00      1566
+        golf       0.98      1.00      0.99      1995
+       boxeo       1.00      1.00      1.00      1454
+      basket       0.99      0.99      0.99      1679
+   americano       0.98      0.96      0.97      1860
+
+    accuracy                           0.99     15426
+   macro avg       0.99      0.99      0.99     15426
+weighted avg       0.99      0.99      0.99     15426
+
+         precision    recall  f1-score   support
+
+    beisball       1.00      0.99      0.99      1541
+    ciclismo       1.00      1.00      1.00      1493
+    natacion       1.00      1.00      1.00      1038
+       tenis       1.00      1.00      1.00      1824
+          f1       1.00      0.98      0.99      1061
+      futbol       1.00      0.99      1.00      1513
+        golf       1.00      0.99      0.99      1907
+       boxeo       1.00      1.00      1.00      1482
+      basket       1.00      0.99      0.99      1753
+   americano       0.96      0.99      0.98      1814
+
+    accuracy                           0.99     15426
+   macro avg       0.99      0.99      0.99     15426
+weighted avg       0.99      0.99      0.99     15426
+
+             precision    recall  f1-score   support
+
+    beisball       0.99      0.99      0.99      1552
+    ciclismo       1.00      1.00      1.00      1489
+    natacion       1.00      1.00      1.00      1066
+       tenis       1.00      1.00      1.00      1747
+          f1       0.99      0.98      0.98       971
+      futbol       0.99      0.99      0.99      1515
+        golf       0.96      1.00      0.98      1981
+       boxeo       1.00      1.00      1.00      1430
+      basket       1.00      0.99      0.99      1849
+   americano       0.98      0.95      0.97      1826
+
+    accuracy                           0.99     15426
+   macro avg       0.99      0.99      0.99     15426
+weighted avg       0.99      0.99      0.99     15426
+
+//////30 epocas///
+
+              precision    recall  f1-score   support
+
+    beisball       1.00      1.00      1.00      1552
+    ciclismo       1.00      1.00      1.00      1520
+    natacion       1.00      1.00      1.00      1057
+       tenis       1.00      1.00      1.00      1801
+          f1       1.00      0.99      0.99       990
+      futbol       0.99      1.00      1.00      1506
+        golf       0.98      1.00      0.99      1885
+       boxeo       0.99      1.00      1.00      1442
+      basket       0.99      0.99      0.99      1774
+   americano       0.99      0.97      0.98      1899
+
+    accuracy                           0.99     15426
+   macro avg       0.99      0.99      0.99     15426
+weighted avg       0.99      0.99      0.99     15426
+
+/////////40/////
+              precision    recall  f1-score   support
+
+    beisball       1.00      1.00      1.00      1540
+    ciclismo       1.00      1.00      1.00      1492
+    natacion       1.00      1.00      1.00      1054
+       tenis       1.00      1.00      1.00      1767
+          f1       1.00      0.99      0.99       991
+      futbol       1.00      0.99      1.00      1559
+        golf       0.99      1.00      0.99      1972
+       boxeo       1.00      1.00      1.00      1419
+      basket       1.00      1.00      1.00      1738
+   americano       0.99      0.99      0.99      1894
+
+    accuracy                           1.00     15426
+   macro avg       1.00      1.00      1.00     15426
+weighted avg       1.00      1.00      1.00     15426
+
+/////60
+              precision    recall  f1-score   support
+
+    beisball       1.00      1.00      1.00      1558
+    ciclismo       1.00      1.00      1.00      1505
+    natacion       1.00      1.00      1.00      1008
+       tenis       1.00      1.00      1.00      1813
+          f1       1.00      0.99      0.99      1052
+      futbol       1.00      1.00      1.00      1482
+        golf       0.98      1.00      0.99      1931
+       boxeo       1.00      1.00      1.00      1415
+      basket       1.00      1.00      1.00      1769
+   americano       0.99      0.98      0.98      1893
+
+    accuracy                           1.00     15426
+   macro avg       1.00      1.00      1.00     15426
+weighted avg       1.00      1.00      1.00     15426
