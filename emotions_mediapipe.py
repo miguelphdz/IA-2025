@@ -75,7 +75,7 @@ def main():
         rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         results = face_mesh.process(rgb)
 
-        emotion = "No face"
+        emotion = "no face"
         if results.multi_face_landmarks:
             lm = results.multi_face_landmarks[0].landmark
             pts = landmarks_to_array(lm, w, h)
@@ -98,23 +98,22 @@ def main():
             mouth_w = (mouth_max_x - mouth_min_x) / face_width
             mouth_h = (mouth_max_y - mouth_min_y) / face_height
 
-            # ojos: centros e interocular
+            # ojos
             left_eye_c = center_of(left_eye)
             right_eye_c = center_of(right_eye)
             inter_eye = np.linalg.norm(left_eye_c - right_eye_c) / face_width
 
-            # cejas: centros y distancia entre cejas (horizontal)
+            # cejas
             left_brow_c = center_of(left_brow)
             right_brow_c = center_of(right_brow)
             brows_dist = abs(left_brow_c[0] - right_brow_c[0]) / face_width
 
-            # separación vertical entre ceja y ojo (si ceja baja -> gap pequeño)
+            # separación vertical entre ceja y ojo
             brow_eye_gap_l = (left_eye_c[1] - left_brow_c[1]) / face_height
             brow_eye_gap_r = (right_eye_c[1] - right_brow_c[1]) / face_height
 
             emotion = classify_emotion(mouth_w, mouth_h, inter_eye, brows_dist, brow_eye_gap_l, brow_eye_gap_r)
 
-            # Dibujar información en la imagen
             cv2.rectangle(frame, (int(face_min_x), int(face_min_y)), (int(face_max_x), int(face_max_y)), (0,255,0), 1)
             cv2.putText(frame, f"Emotion: {emotion}", (10,30), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0,255,255), 2)
 
