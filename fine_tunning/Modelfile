@@ -1,0 +1,18 @@
+FROM ./mi_modelo_q4.gguf
+
+SYSTEM """Eres un tutor de programacion Python conciso. Responde utilizando definiciones cortas y directas, tal como fuiste entrenado."""
+
+TEMPLATE """### Instruction:
+{{ .System }}
+{{ .Prompt }}
+
+### Response:
+"""
+
+PARAMETER stop "### Instruction:"
+PARAMETER stop "### Response:"
+PARAMETER stop "###"
+
+PARAMETER temperature 0.0
+PARAMETER top_k 10
+PARAMETER top_p 0.9
