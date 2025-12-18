@@ -2,12 +2,9 @@ import pygame
 import math
 from queue import PriorityQueue
 
-# --- Configuración inicial ---
-WIDTH = 800  # Tamaño de la ventana
+WIDTH = 800  
 WIN = pygame.display.set_mode((WIDTH, WIDTH))
-pygame.display.set_caption("A* Pathfinding Algorithm")
 
-# Colores
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (64, 224, 208)
@@ -19,7 +16,7 @@ ORANGE = (255, 165, 0)
 GREY = (128, 128, 128)
 TURQUOISE = (64, 224, 208)
 
-# --- Clase Nodo ---
+# 
 class Spot:
     def __init__(self, row, col, width, total_rows):
         self.row = row
@@ -54,46 +51,50 @@ class Spot:
     def update_neighbors(self, grid, allow_diagonals=False):
         self.neighbors = []
         rows = self.total_rows
-        # Movimientos cardinales
-        if self.row < rows - 1 and not grid[self.row + 1][self.col].is_barrier():  # Abajo
+        
+        if self.row < rows - 1 and not grid[self.row + 1][self.col].is_barrier():
             self.neighbors.append(grid[self.row + 1][self.col])
-        if self.row > 0 and not grid[self.row - 1][self.col].is_barrier():  # Arriba
+        if self.row > 0 and not grid[self.row - 1][self.col].is_barrier():
             self.neighbors.append(grid[self.row - 1][self.col])
-        if self.col < rows - 1 and not grid[self.row][self.col + 1].is_barrier():  # Derecha
+        if self.col < rows - 1 and not grid[self.row][self.col + 1].is_barrier():
             self.neighbors.append(grid[self.row][self.col + 1])
-        if self.col > 0 and not grid[self.row][self.col - 1].is_barrier():  # Izquierda
+        if self.col > 0 and not grid[self.row][self.col - 1].is_barrier():
             self.neighbors.append(grid[self.row][self.col - 1])
 
-        directions = [(-1, -1), (-1, 1), (1, -1), (1, 1)]
-        for dr, dc in directions:
+        if allow_diagonals:
+            directions = [(-1, -1), (-1, 1), (1, -1), (1, 1)]
+            for dr, dc in directions:
                 r, c = self.row + dr, self.col + dc
                 if 0 <= r < rows and 0 <= c < rows and not grid[r][c].is_barrier():
                     self.neighbors.append(grid[r][c])
-        
 
+        
     def __lt__(self, other):
         return False
 
 
-# --- Funciones auxiliares ---
 def h(p1, p2, method="manhattan"):
     x1, y1 = p1
     x2, y2 = p2
     if method == "euclideana":
-        return math.sqrt((x1 - x2)**2 + (y1 - y2)**2)
+        return math.sqrt((x1 - x2)**2 + (y1 - y2)**2)*2
     return abs(x1 - x2) + abs(y1 - y2)
+
 
 def reconstruct_path(came_from, current, draw):
     while current in came_from:
         current = came_from[current]
         current.make_path()
         draw()
-
+    
+# main
 def algorithm(draw, grid, start, end, heuristic="manhattan", allow_diagonals=False):
     count = 0
     open_set = PriorityQueue()
-    open_set.put((0, count, start))
+    # (f_score, h_score, count, node)
+    open_set.put((0, 0, count, start)) 
     came_from = {}
+    
     g_score = {spot: float("inf") for row in grid for spot in row}
     g_score[start] = 0
     f_score = {spot: float("inf") for row in grid for spot in row}
@@ -106,8 +107,13 @@ def algorithm(draw, grid, start, end, heuristic="manhattan", allow_diagonals=Fal
             if event.type == pygame.QUIT:
                 pygame.quit()
 
-        current = open_set.get()[2]
-        open_set_hash.remove(current)
+        current = open_set.get()[3]
+        
+        # manejo de duplicados en la cola
+        if current in open_set_hash:
+            open_set_hash.remove(current)
+        else:
+            continue 
 
         if current == end:
             reconstruct_path(came_from, end, draw)
@@ -123,12 +129,13 @@ def algorithm(draw, grid, start, end, heuristic="manhattan", allow_diagonals=Fal
             if temp_g_score < g_score[neighbor]:
                 came_from[neighbor] = current
                 g_score[neighbor] = temp_g_score
-                f_score[neighbor] = temp_g_score + h(neighbor.get_pos(), end.get_pos(), heuristic)
-                if neighbor not in open_set_hash:
-                    count += 1
-                    open_set.put((f_score[neighbor], count, neighbor))
-                    open_set_hash.add(neighbor)
-                    neighbor.make_open()
+                h_score = h(neighbor.get_pos(), end.get_pos(), heuristic)
+                f_score[neighbor] = temp_g_score + h_score
+                
+                count += 1
+                open_set.put((f_score[neighbor], h_score, count, neighbor))
+                open_set_hash.add(neighbor)
+                neighbor.make_open()
 
         draw()
         if current != start:
@@ -137,7 +144,6 @@ def algorithm(draw, grid, start, end, heuristic="manhattan", allow_diagonals=Fal
     return False
 
 
-# --- Creación del grid ---
 def make_grid(rows, width):
     grid = []
     gap = width // rows
@@ -170,7 +176,7 @@ def get_clicked_pos(pos, rows, width):
     col = x // gap
     return row, col
 
-# --- Función principal ---
+
 def main(win, width):
     rows = 20
     grid = make_grid(rows, width)
@@ -179,15 +185,14 @@ def main(win, width):
     run = True
     started = False
     heuristic = "manhattan"
-    allow_diagonals = True
+    allow_diagonals = False
 
     while run:
         draw(win, grid, rows, width)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
-
-            # Click izquierdo
+            
             if pygame.mouse.get_pressed()[0]:
                 pos = pygame.mouse.get_pos()
                 row, col = get_clicked_pos(pos, rows, width)
@@ -201,7 +206,7 @@ def main(win, width):
                 elif spot != end and spot != start:
                     spot.make_barrier()
 
-            # Click derecho
+            
             elif pygame.mouse.get_pressed()[2]:
                 pos = pygame.mouse.get_pos()
                 row, col = get_clicked_pos(pos, rows, width)
@@ -212,8 +217,9 @@ def main(win, width):
                 elif spot == end:
                     end = None
 
+            
             if event.type == pygame.KEYDOWN:
-                # Iniciar A*
+                
                 if event.key == pygame.K_RETURN and start and end:
                     for row in grid:
                         for spot in row:
@@ -223,29 +229,22 @@ def main(win, width):
                               heuristic=heuristic,
                               allow_diagonals=allow_diagonals)
 
-                # Reset
                 if event.key == pygame.K_BACKSPACE:
                     start = None
                     end = None
                     grid = make_grid(rows, width)
 
-                # Cambiar heurística
-             #   if event.key == pygame.K_h:
-              #      heuristic = "euclidean" if heuristic == "manhattan" else "manhattan"
-               #     print(f"Heurística: {heuristic}")
+                if event.key == pygame.K_h:
+                    heuristic = "euclideana" if heuristic == "manhattan" else "manhattan"
+                    allow_diagonals = not allow_diagonals  
+                    print(f"Heurística: {heuristic}")
 
-                # Activar/Desactivar diagonales
-              #  if event.key == pygame.K_d:
-               #     allow_diagonals = not allow_diagonals
-                #    print("Diagonales:", "activadas" if allow_diagonals else "desactivadas")
-
-                # Cambiar tamaño del grid
-               # if event.key == pygame.K_UP:
-               #     rows = min(60, rows + 5)
-               #     grid = make_grid(rows, width)
-               # if event.key == pygame.K_DOWN:
-               #     rows = max(10, rows - 5)
-               #     grid = make_grid(rows, width)
+                if event.key == pygame.K_UP:
+                    rows = min(60, rows + 1)
+                    grid = make_grid(rows, width)
+                if event.key == pygame.K_DOWN:
+                    rows = max(10, rows - 1)
+                    grid = make_grid(rows, width)
 
     pygame.quit()
 
