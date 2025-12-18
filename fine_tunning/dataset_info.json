@@ -1,9 +1,0 @@
-{
-  "tutor_programacion": {
-    "file_name": "tutor_dataset.json",
-    "columns": {
-      "prompt": "instruction",
-      "response": "output"
-    }
-  }
-}
